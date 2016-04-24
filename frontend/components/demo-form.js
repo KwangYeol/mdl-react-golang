@@ -21,10 +21,15 @@ module.exports = React.createClass({
     // This fetches some data using jquery and sets the default values in the component's local state
     // In theory, this should all be done with Flux/redux, but man, does this Javasctipt framework
     // clusterfuck *ever* end?  How do people stand it?
+    // url: "http://raw.githubusercontent.com/odewahn/mdl-react-golang/master/backend/public/data.json",
+    // XMLHttpRequest cannot load http://localhost:3001/data.json. 
+    // No 'Access-Control-Allow-Origin' header is present on the requested resource. 
+    // Origin 'http://localhost:3000' is therefore not allowed access.
+demo-form.js:34It failed because of error
     handle = this
     $.ajax({
       type: "GET",
-      url: "https://raw.githubusercontent.com/odewahn/mdl-react-golang/master/backend/public/data.json",
+      url: "http://localhost:3001/data.json",
       success: function(result) {
         var dat = JSON.parse(result)
         handle.setState(dat)

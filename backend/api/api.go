@@ -1,0 +1,36 @@
+package api
+
+import (
+	"net/http"
+
+	"github.com/mdl-react-golang/model"
+	"github.com/mdl-react-golang/utils"
+
+	_ "github.com/cloudfoundry/jibber_jabber"
+	_ "github.com/nicksnyder/go-i18n/i18n"
+)
+
+func InitApi() {
+	r := Srv.Router.PathPrefix("/api/v1").Subrouter()
+	InitUser(r)
+	InitWebSocket(r)
+	InitCommand(r)
+	InitAdmin(r)
+	InitOAuth(r)
+	InitPreference(r)
+	// 404 on any api route before web.go has a chance to serve it
+	Srv.Router.Handle("/api/{anything:.*}", http.HandlerFunc(Handle404))
+
+	utils.InitHTML()
+}
+
+func HandleEtag(etag string, w http.ResponseWriter, r *http.Request) bool {
+	if et := r.Header.Get(model.HEADER_ETAG_CLIENT); len(etag) > 0 {
+		if et == etag {
+			w.WriteHeader(http.StatusNotModified)
+			return true
+		}
+	}
+
+	return false
+}
